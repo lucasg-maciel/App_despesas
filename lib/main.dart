@@ -4,6 +4,7 @@ import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'components/chart.dart';
 import 'models/transaction.dart';
+import 'components/tela_resumo_mensal.dart';
 
 main() => runApp(ExpensesApp());
 
@@ -91,6 +92,22 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Chart(_recentTransactions),
+            ElevatedButton(
+                child: Text(
+                  'Resumo Mensal',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  
+                ),
+                onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TelaResumoMensal(),
+                ),
+              )),
             TransactionList(_transactions, _removeTransaction),
           ],
         ),
