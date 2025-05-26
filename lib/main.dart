@@ -4,7 +4,7 @@ import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'components/chart.dart';
 import 'models/transaction.dart';
-import 'components/tela_resumo_mensal.dart';
+import 'components/tela_resumo_semanal.dart';
 
 main() => runApp(ExpensesApp());
 
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const TelaResumoMensal(),
+                  builder: (context) => TelaResumoSemanal(_transactions),
                 ),
               )),
             TransactionList(_transactions, _removeTransaction),
