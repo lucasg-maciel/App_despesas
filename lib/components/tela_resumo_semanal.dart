@@ -40,8 +40,18 @@ class TelaResumoSemanal extends StatelessWidget {
     String _getWeekDateRange(int semana, DateTime date) {
     
     DateTime primeiroDiaDoMes = DateTime(date.year, date.month, 1);
+
+    int primeiraSegundaOffset = (8 - primeiroDiaDoMes.weekday) % 7;
+    DateTime primeiraSegunda = primeiroDiaDoMes.add(Duration(days: primeiraSegundaOffset));
+
+    if (primeiroDiaDoMes.weekday <= 1) {
+      primeiraSegunda = primeiroDiaDoMes;
+    } else {
+    primeiraSegunda = primeiroDiaDoMes.subtract(Duration(days: primeiroDiaDoMes.weekday - 1));
+    }
+
     int daysToAdd = (semana - 1) * 7;
-    DateTime comecoSemana = primeiroDiaDoMes.add(Duration(days: daysToAdd));
+    DateTime comecoSemana = primeiraSegunda.add(Duration(days: daysToAdd));
     DateTime fimSemana = comecoSemana.add(Duration(days: 6));
 
     DateTime ultimoDiaDoMes = DateTime(date.year, date.month + 1, 1);
@@ -53,10 +63,28 @@ class TelaResumoSemanal extends StatelessWidget {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
     final weeklyData = _transactionsBysemana;
-    
+    final sortedEntries = weeklyData.entries.toList()..sort((a, b) {
+        int semanaA = int.parse(a.key.split(' ')[1]);
+        int semanaB = int.parse(b.key.split(' ')[1]);
+        
+        DateTime dateA = a.value.first.date;
+        DateTime dateB = b.value.first.date;
+        
+        if (dateA.year != dateB.year) {
+          return dateB.year.compareTo(dateA.year);
+        }
+        if (dateA.month != dateB.month) {
+          return dateB.month.compareTo(dateA.month);
+        }
+      
+        return semanaB.compareTo(semanaA); 
+      });
+      
     return Scaffold(
       appBar: AppBar(
         title: const Text('Resumo Semanal'),
@@ -75,7 +103,7 @@ class TelaResumoSemanal extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     itemCount: weeklyData.length,
                     itemBuilder: (context, index) {
-                      String chave = weeklyData.keys.elementAt(index);
+                      String chave = sortedEntries[index].key;
                       List<Transaction> weekTransactions = weeklyData[chave]!;
                       double weekTotal = getTotalSemana(weekTransactions);
                       int semana = int.parse(chave.split(' ')[1]);

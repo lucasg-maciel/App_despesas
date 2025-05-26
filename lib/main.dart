@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Chart(_recentTransactions),
             ElevatedButton(
                 child: Text(
-                  'Resumo Mensal',
+                  'Resumo Semanal',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
