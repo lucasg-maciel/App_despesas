@@ -37,6 +37,9 @@ class TelaResumoSemanal extends StatelessWidget {
     return weekTransactions.fold(0.0, (sum, transaction) => sum + transaction.value);
   }
 
+    double getTotalGastos(List<Transaction> transactions) {
+    return transactions.fold(0.0, (sum, transaction) => sum + transaction.value);
+  }
     String _getWeekDateRange(int semana, DateTime date) {
     
     DateTime primeiroDiaDoMes = DateTime(date.year, date.month, 1);
@@ -84,7 +87,7 @@ class TelaResumoSemanal extends StatelessWidget {
       
         return semanaB.compareTo(semanaA); 
       });
-      
+      String totalGasto = getTotalGastos(transactions).toString();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Resumo Semanal'),
@@ -98,6 +101,40 @@ class TelaResumoSemanal extends StatelessWidget {
             )
           : Column(
               children: [
+                Container(
+                  padding:  EdgeInsets.all(10),
+                  margin:  EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.purple.shade50,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: Column(
+                    children: [
+                       Text(
+                        'Total de Gastos',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Total: R\$ $totalGasto',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.purple,
+                        ),
+                      ),
+                      Text(
+                        '${transactions.length} transações em ${weeklyData.length} semanas',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(8),
@@ -108,7 +145,6 @@ class TelaResumoSemanal extends StatelessWidget {
                       double weekTotal = getTotalSemana(weekTransactions);
                       int semana = int.parse(chave.split(' ')[1]);
                       String dateRange = _getWeekDateRange(semana, weekTransactions.first.date);
-                      
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 4),
                         child: ExpansionTile(
